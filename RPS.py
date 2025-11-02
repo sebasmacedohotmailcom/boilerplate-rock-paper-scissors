@@ -1,17 +1,40 @@
-import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
+try:
+    import subprocess
+    import sys
+    import os
+    import warnings
+    warnings.filterwarnings('ignore')
+    # Configuración de entorno
+    os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+    os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 
-import tensorflow as tf
-import numpy as np
-import pandas as pd
-from collections import deque, Counter
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.preprocessing import LabelEncoder
-import warnings
-warnings.filterwarnings('ignore')
+    # Importaciones
+    import tensorflow as tf
+    import numpy as np
+    import pandas as pd
+    from collections import deque, Counter
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.preprocessing import LabelEncoder
+except Exception:
+    # Lista de paquetes requeridos
+    required_packages = [
+        "tensorflow",
+        "numpy",
+        "pandas",
+        "scikit-learn"
+    ]
+
+    # Instalación automática si no están presentes
+    for package in required_packages:
+        try:
+            __import__(package)
+        except ImportError:
+            subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+
+    
 
 def player(prev_play, opponent_history=[]):
+    
     # === Global persistent initialization ===
     if not hasattr(player, "initialized"):
         player.initialized = True
